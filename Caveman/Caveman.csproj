@@ -42,7 +42,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Game1.cs" />
-    <Compile Include="Model\Sprite.cs" />
+    <Compile Include="Models\Animation.cs" />
+    <Compile Include="Models\Background.cs" />
+    <Compile Include="Models\Level.cs" />
+    <Compile Include="Models\Level1.cs" />
+    <Compile Include="Models\Managers\GameManager.cs" />
+    <Compile Include="Models\Sprite.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -54,6 +59,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Backgrounds\mountains.png" />
+    <Content Include="Content\CavemanHitting.png" />
+    <Content Include="Content\CavemanJumping.png" />
+    <Content Include="Content\CavemanRunning.png" />
+    <Content Include="Content\CavemanStanding.png" />
+    <Content Include="Content\pterodactilo.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>

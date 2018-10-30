@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Caveman.Models.Managers;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -11,11 +12,14 @@ namespace Caveman
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        public static Rectangle Bounds { get; private set; }
+        GameManager manager;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            this.manager = GameManager.Instance;
         }
 
         protected override void Initialize()
@@ -29,14 +33,16 @@ namespace Caveman
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
+            Bounds = GraphicsDevice.Viewport.Bounds;
+            manager.LoadContent(Content);
             // TODO: use this.Content to load your game content here
+
         }
 
 
         protected override void UnloadContent()
         {
-            // TODO: Unload any non ContentManager content here
+            manager.UnloadContent(Content);
         }
 
 
@@ -46,6 +52,7 @@ namespace Caveman
                 Exit();
 
             // TODO: Add your update logic here
+            manager.Update(ref gameTime);
 
             base.Update(gameTime);
         }
@@ -55,8 +62,11 @@ namespace Caveman
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-
+            spriteBatch.Begin();
+                manager.Draw(ref spriteBatch, ref gameTime);
+            spriteBatch.End();
             base.Draw(gameTime);
+
         }
     }
 }
