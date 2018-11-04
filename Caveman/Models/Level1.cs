@@ -1,4 +1,5 @@
 ﻿using Caveman.Models.Managers;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -11,6 +12,7 @@ namespace Caveman.Models
 {
     public class Level1:Level
     {
+        Caveman caveman;
         private static Level1 instance = null;
         public static Level1 Instance
         {
@@ -26,11 +28,28 @@ namespace Caveman.Models
 
         public override void LoadContent(ContentManager content)
         {
-            Texture2D _texture1 = content.Load<Texture2D>("./Backgrounds/layer_01");
-            Texture2D _texture2 = content.Load<Texture2D>("./Backgrounds/layer_02");
-            Texture2D _texture3 = content.Load<Texture2D>("./Backgrounds/treeses_pasto4");
+            #region Background
+            Texture2D _texture0 = content.Load<Texture2D>("./Backgrounds/posible-bg3");
+            Texture2D _texture1 = content.Load<Texture2D>("./Backgrounds/treeses_pasto4");
 
-            this.background = new Background(_texture1,_texture2,_texture3);
+            this.background = new Background(_texture0,_texture1);
+
+            #endregion
+
+            caveman = new Caveman(new Vector2(0, 350));
+            caveman.LoadContent(content);
+        }
+
+        public override void Update(ref GameTime gameTime)
+        {
+            base.Update(ref gameTime);
+            caveman.Update(ref gameTime);
+        }
+
+        public override void Draw(ref SpriteBatch spriteBatch, ref GameTime gameTime)
+        {
+            base.Draw(ref spriteBatch, ref gameTime);
+            caveman.Draw(ref spriteBatch, ref gameTime);
         }
     }
 }
