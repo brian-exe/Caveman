@@ -47,7 +47,7 @@
     <Compile Include="Models\Level.cs" />
     <Compile Include="Models\Level1.cs" />
     <Compile Include="Models\Managers\GameManager.cs" />
-    <Compile Include="Models\Sprite.cs" />
+    <Compile Include="Models\BaseSprite.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -59,7 +59,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Backgrounds\mountains.png" />
+    <Content Include="Content\Backgrounds\Gradient.png" />
+    <Content Include="Content\Backgrounds\layer_01.png" />
+    <Content Include="Content\Backgrounds\layer_02.png" />
+    <Content Include="Content\Backgrounds\posible-bg3.png" />
+    <Content Include="Content\Backgrounds\treeses.png" />
+    <Content Include="Content\Backgrounds\treeses_pasto.png" />
+    <Content Include="Content\Backgrounds\treeses_pasto2.png" />
+    <Content Include="Content\Backgrounds\treeses_pasto3.png" />
+    <Content Include="Content\Backgrounds\treeses_pasto4.png" />
+    <Content Include="Content\Backgrounds\treeses_small.png" />
     <Content Include="Content\CavemanHitting.png" />
     <Content Include="Content\CavemanJumping.png" />
     <Content Include="Content\CavemanRunning.png" />

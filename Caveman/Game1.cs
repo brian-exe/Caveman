@@ -18,6 +18,7 @@ namespace Caveman
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+            graphics.GraphicsProfile = GraphicsProfile.HiDef;
             Content.RootDirectory = "Content";
             this.manager = GameManager.Instance;
         }

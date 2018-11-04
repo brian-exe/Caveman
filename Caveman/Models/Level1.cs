@@ -26,7 +26,11 @@ namespace Caveman.Models
 
         public override void LoadContent(ContentManager content)
         {
-            this.background = new Background(content.Load<Texture2D>("./Backgrounds/mountains"));
+            Texture2D _texture1 = content.Load<Texture2D>("./Backgrounds/layer_01");
+            Texture2D _texture2 = content.Load<Texture2D>("./Backgrounds/layer_02");
+            Texture2D _texture3 = content.Load<Texture2D>("./Backgrounds/treeses_pasto4");
+
+            this.background = new Background(_texture1,_texture2,_texture3);
         }
     }
 }
