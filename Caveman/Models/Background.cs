@@ -14,6 +14,7 @@ namespace Caveman.Models
         private BaseSprite layer0;
         private BaseSprite layer1;
         private BaseSprite layer2;
+        public int Rounds { get; set; }
 
         public float Velocity = 2.0f;
 
@@ -22,6 +23,7 @@ namespace Caveman.Models
             this.layer0 = new BaseSprite { Position = new Vector2(0,0), Texture= _texture0,Color = Color.White };
             this.layer2 = new BaseSprite { Position = new Vector2(0, 260), Texture = _texture1, Color = Color.White };
             position = Game1.Bounds;
+            this.Rounds = 0;
         }
 
         internal void Draw(ref SpriteBatch spriteBatch, ref GameTime gameTime)
@@ -38,8 +40,15 @@ namespace Caveman.Models
         internal void Update(GameTime gameTime)
         {
 
+        }
+
+        public void MoveForward()
+        {
             if (layer2.Position.X <= -layer2.Texture.Width)
-                layer2.Position = new Vector2(0,layer2.Position.Y);
+            {
+                layer2.Position = new Vector2(0, layer2.Position.Y);
+                this.Rounds += 1;
+            }
 
             else
                 layer2.Position = new Vector2(layer2.Position.X - Velocity, layer2.Position.Y);

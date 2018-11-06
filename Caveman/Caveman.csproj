@@ -61,21 +61,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Backgrounds\Gradient.png" />
-    <Content Include="Content\Backgrounds\layer_01.png" />
-    <Content Include="Content\Backgrounds\layer_02.png" />
     <Content Include="Content\Backgrounds\posible-bg3.png" />
-    <Content Include="Content\Backgrounds\treeses.png" />
-    <Content Include="Content\Backgrounds\treeses_pasto.png" />
-    <Content Include="Content\Backgrounds\treeses_pasto2.png" />
-    <Content Include="Content\Backgrounds\treeses_pasto3.png" />
     <Content Include="Content\Backgrounds\treeses_pasto4.png" />
-    <Content Include="Content\Backgrounds\treeses_small.png" />
     <Content Include="Content\CavemanHitting.png" />
+    <Content Include="Content\CavemanHitting_sm.png" />
     <Content Include="Content\CavemanJumping.png" />
+    <Content Include="Content\CavemanJumping_sm.png" />
     <Content Include="Content\CavemanRunning.png" />
+    <Content Include="Content\CavemanRunning_sm.png" />
     <Content Include="Content\CavemanStanding.png" />
     <Content Include="Content\CavemanStanding_sm.png" />
+    <Content Include="Content\CavemanThrowing.png" />
     <Content Include="Content\pterodactilo.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>

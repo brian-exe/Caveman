@@ -44,6 +44,11 @@ namespace Caveman.Models
         {
             base.Update(ref gameTime);
             caveman.Update(ref gameTime);
+            if (caveman.Position.X >= Game1.Bounds.Width / 2)
+            {
+                caveman.MoveBackwards();
+                background.MoveForward();
+            }
         }
 
         public override void Draw(ref SpriteBatch spriteBatch, ref GameTime gameTime)

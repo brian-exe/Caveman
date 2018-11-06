@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,8 +13,12 @@ namespace Caveman.Models
     public class Caveman : Sprite
     {
         float _timer;
-        public Caveman(Vector2 _position/*, Texture2D _texture, Color _color, Dictionary<string, Animation> _animations*/)
-            //: base(_position,_texture, _color, _animations)
+        private float VelocityX;
+        private float VelocityY =0.0f;
+        private float gravity = 0.5f;
+        private bool Jumping = false;
+
+        public Caveman(Vector2 _position)
         {
             this.Position = _position;
             this.Color = Color.White;
@@ -23,16 +28,19 @@ namespace Caveman.Models
         {
             Dictionary<String, Animation> animDict = new Dictionary<string, Animation> {
                 {"Standing",
-                    new Animation(content.Load<Texture2D>("CavemanStanding_sm"),4,0.5f)
+                    new Animation(content.Load<Texture2D>("CavemanStanding_sm"),4,0.4f,Animation.Loopeable)
                 },
-                {"Walking",
-                    new Animation(content.Load<Texture2D>("CavemanRunning"),7,0.2f)
+                {"Running",
+                    new Animation(content.Load<Texture2D>("CavemanRunning_sm"),6,0.2f,Animation.Loopeable)
+                },
+                {"Running_left",
+                    new Animation(content.Load<Texture2D>("CavemanRunningLeft_sm"),6,0.2f,Animation.Loopeable)
                 },
                 {"Jumping",
-                    new Animation(content.Load<Texture2D>("CavemanJumping"),4,0.2f)
+                    new Animation(content.Load<Texture2D>("CavemanJumping_sm"),7,0.3f,Animation.NotLoopeable)
                 },
                 {"Hitting",
-                    new Animation(content.Load<Texture2D>("CavemanHitting"),5,0.2f)
+                    new Animation(content.Load<Texture2D>("CavemanHitting_sm"),5,0.1f,Animation.NotLoopeable)
                 },
             };
 
@@ -42,7 +50,46 @@ namespace Caveman.Models
         public override void Update(ref GameTime gameTime)
         {
             currentAnimation = AnimationsDict["Standing"];
-            //currentAnimation.CurrentFrame = 0;
+            currentAnimation.IsLooping = false;
+
+            #region Keys
+            if (Keyboard.GetState().IsKeyDown(Keys.C))
+            {
+                currentAnimation = AnimationsDict["Hitting"];
+            }
+            else if (Keyboard.GetState().IsKeyDown(Keys.Right))
+            {
+                if (!currentAnimation.IsLooping)
+                {
+                    this.Position = new Vector2(this.Position.X + 2, this.Position.Y);
+                    currentAnimation = AnimationsDict["Running"];
+                }
+            }
+            else if (Keyboard.GetState().IsKeyDown(Keys.Left))
+            {
+                this.Position = new Vector2(this.Position.X - 2, this.Position.Y);
+                currentAnimation = AnimationsDict["Running_left"];
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Space))
+            {
+                currentAnimation = AnimationsDict["Jumping"];
+                StartJumping();
+            }
+            if (Keyboard.GetState().IsKeyUp(Keys.Space)) {
+                EndJumping();
+            }
+            #endregion
+
+            VelocityY += gravity;
+            this.Position += new Vector2(0, VelocityY);
+
+            if (this.Position.Y > 350)
+            {
+                this.Position = new Vector2(this.Position.X, 350);
+                VelocityY = 0.0f;
+                Jumping = false;
+            }
 
             _timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
@@ -53,14 +100,38 @@ namespace Caveman.Models
                 currentAnimation.CurrentFrame++;
 
                 if (currentAnimation.CurrentFrame >= currentAnimation.FrameCount)
+                {
                     currentAnimation.CurrentFrame = 0;
+                    currentAnimation.IsLooping = false;
+                }
             }
         }
 
+        private void StartJumping()
+        {
+            if (!Jumping)
+            {
+                VelocityY = -12.0f;
+                Jumping = true;
+            }
+        }
+
+        private void EndJumping()
+        {
+            if (VelocityY < -6.0f)
+            {
+                VelocityY = -6.0f;
+                
+            }
+        }
+
+        internal void MoveBackwards()
+        {
+            this.Position = new Vector2(this.Position.X -2, this.Position.Y);
+        }
 
         public override void Draw(ref SpriteBatch spriteBatch, ref GameTime gameTime)
         {
-            //spriteBatch.Draw(this.currentAnimati, this.Position, this.Color);
 
             spriteBatch.Draw(currentAnimation.Texture,
                  Position,
