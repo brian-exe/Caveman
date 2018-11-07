@@ -78,6 +78,7 @@
     <Compile Include="Models\Level1.cs" />
     <Compile Include="Models\Managers\GameManager.cs" />
     <Compile Include="Models\BaseSprite.cs" />
+    <Compile Include="Models\Rock.cs" />
     <Compile Include="Models\Sprite.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

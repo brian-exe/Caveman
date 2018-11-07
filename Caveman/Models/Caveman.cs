@@ -17,11 +17,18 @@ namespace Caveman.Models
         private float VelocityY =0.0f;
         private float gravity = 0.5f;
         private bool Jumping = false;
+        private Texture2D rockTexture;
+
+        private List<Rock> rocks;
+        private List<Rock> removedRocks;
+        private Rock auxRock = null;
 
         public Caveman(Vector2 _position)
         {
             this.Position = _position;
             this.Color = Color.White;
+            this.rocks = new List<Rock>();
+            this.removedRocks = new List<Rock>();
         }
 
         public override void LoadContent(ContentManager content)
@@ -48,8 +55,23 @@ namespace Caveman.Models
             };
 
             this.currentAnimation = AnimationsDict["Standing"];
+
+            this.rockTexture = content.Load<Texture2D>("spinning-rock_sm");
         }
 
+        internal void MarkAsRemovedRock(Rock rock)
+        {
+            this.removedRocks.Add(rock);
+        }
+
+        internal void RemoveRocks()
+        {
+            if(removedRocks.Count() > 0)
+            {
+                this.rocks.RemoveAll(c => this.removedRocks.Contains(c));
+                this.removedRocks.RemoveAll(c => true);
+            }
+        }
         public override void Update(ref GameTime gameTime)
         {
             ExecuteMoves();
@@ -70,6 +92,9 @@ namespace Caveman.Models
                 VelocityY = 0.0f;
                 Jumping = false;
             }
+
+            if(this.Position.Y < -10)
+                this.Position = new Vector2(this.Position.X, -10);
             #endregion
 
             #region Manage Animation Frames
@@ -88,6 +113,9 @@ namespace Caveman.Models
                 }
             }
             #endregion
+
+            UpdateWeapons(ref gameTime);
+            RemoveRocks();
         }
         private void ExecuteMoves()
         {
@@ -110,7 +138,32 @@ namespace Caveman.Models
             {
                 EndJumping();
             }
+
+
+            if (Keyboard.GetState().IsKeyDown(Keys.X))
+            {
+                LoadRock();
+            }
+            if (Keyboard.GetState().IsKeyUp(Keys.X))
+            {
+                ThrowRock();
+            }
         }
+
+        private void ThrowRock()
+        {
+            if(auxRock != null)
+            {
+                this.rocks.Add(auxRock);
+                auxRock = null;
+            }
+        }
+
+        private void LoadRock()
+        {
+            auxRock = new Rock(this.Position, this.rockTexture, this);
+        }
+
         private void SetAnimation()
         {
             if (Keyboard.GetState().IsKeyDown(Keys.C))
@@ -142,7 +195,7 @@ namespace Caveman.Models
 
         private void StartJumping()
         {
-            if (!Jumping)
+            if (/*!Jumping*/true)
             {
                 VelocityY = -12.0f;
                 Jumping = true;
@@ -182,6 +235,24 @@ namespace Caveman.Models
                                currentAnimation.FrameWidth,
                                currentAnimation.FrameHeight),
                  Color.White);
+
+            DrawWeapons(ref spriteBatch, ref gameTime);
+        }
+
+        private void DrawWeapons(ref SpriteBatch spriteBatch, ref GameTime gameTime)
+        {
+            foreach(Rock r in this.rocks)
+            {
+                r.Draw(ref spriteBatch, ref gameTime);
+            }
+        }
+
+        private void UpdateWeapons(ref GameTime gameTime)
+        {
+            foreach (Rock r in this.rocks)
+            {
+                r.Update(ref gameTime);
+            }
         }
     }
 }
