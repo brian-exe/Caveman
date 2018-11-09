@@ -8,16 +8,20 @@ using System.Threading.Tasks;
 
 namespace Caveman.Models
 {
-    class Rock : Sprite
+    class Rock : Sprite,IHarmful
     {
         private float _timer=0.0f;
         Caveman owner;
+
+        public float Damage { get; set; }
+
         public Rock(Vector2 _position, Texture2D _texture, Caveman _owner)
         {
             this.Position = _position;
             this.Color = Color.White;
             this.Texture = _texture;
             this.owner = _owner;
+            this.Damage = 30;
 
             this.AnimationsDict = new Dictionary<string, Animation> {
                 {"Spinning",
@@ -30,12 +34,22 @@ namespace Caveman.Models
 
         public override void Draw(ref SpriteBatch spriteBatch, ref GameTime gameTime)
         {
-            //spriteBatch.Draw(this.Texture, this.Position, this.Color);
-
-            spriteBatch.Draw(currentAnimation.Texture, Position,
+            this.Texture = currentAnimation.Texture;
+            spriteBatch.Draw(this.Texture, Position,
                 new Rectangle(currentAnimation.CurrentFrame * currentAnimation.FrameWidth, 0, currentAnimation.FrameWidth, currentAnimation.FrameHeight), Color.White);
         }
 
+        internal void CheckColissions(List<Sprite> enemies)
+        {
+            foreach (Sprite e in enemies)
+            {
+                if (e.Rectangle.Intersects(this.Rectangle))
+                {
+                    owner.MarkAsRemovedRock(this);
+                    (e as IMortable).ReceiveHit(this);
+                }
+            }
+        }
 
         public override void Update(ref GameTime gameTime)
         {

@@ -12,6 +12,8 @@ namespace Caveman.Models.Managers
     public class GameManager
     {
         Level currentLevel;
+        ContentManager contentManager;
+
 
         private static GameManager instance = null;
         public static GameManager Instance
@@ -28,22 +30,40 @@ namespace Caveman.Models.Managers
 
         public GameManager()
         {
-            this.currentLevel = new Level1();
+            this.currentLevel = Level0.Instance;
+            contentManager = null;
+        }
+
+        public void EndGame()
+        {
+            this.UnloadContent();
+            this.currentLevel = Level0.Instance;
+            LoadContent(contentManager);
         }
 
         internal void LoadContent(ContentManager content)
         {
+            if(this.contentManager ==null)
+                this.contentManager = content;
             currentLevel.LoadContent(content);
         }
 
-        internal void UnloadContent(ContentManager content)
+        internal void UnloadContent()
         {
-            currentLevel.UnloadContent(content);
+            contentManager.Unload();
+            //currentLevel.UnloadContent(contentManager);
         }
 
         internal void Update(ref GameTime gameTime)
         {
             currentLevel.Update(ref gameTime);
+        }
+
+        internal void Start()
+        {
+            UnloadContent();
+            currentLevel = Level1.Instance;
+            LoadContent(contentManager);
         }
 
         internal void Draw(ref SpriteBatch spriteBatch, ref GameTime gameTime)

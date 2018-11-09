@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Caveman.Models
 {
-    public class Caveman : Sprite
+    public class Caveman : Sprite, IMortable
     {
         float _timer;
         private float VelocityX = 2;
@@ -23,12 +23,17 @@ namespace Caveman.Models
         private List<Rock> removedRocks;
         private Rock auxRock = null;
 
+        public bool Died { get; set; }
+        public float Health { get ; set; }
+
         public Caveman(Vector2 _position)
         {
             this.Position = _position;
             this.Color = Color.White;
             this.rocks = new List<Rock>();
             this.removedRocks = new List<Rock>();
+            this.Died = false;
+            this.Health = 100;
         }
 
         public override void LoadContent(ContentManager content)
@@ -59,6 +64,20 @@ namespace Caveman.Models
             this.rockTexture = content.Load<Texture2D>("spinning-rock_sm");
         }
 
+        internal void CheckColissions(List<Sprite> enemies)
+        {
+            foreach(Sprite e in enemies)
+            {
+                if (e.Rectangle.Intersects(this.Rectangle))
+                    (this as IMortable).ReceiveHit(e as IHarmful);
+            }
+
+            foreach(Rock r in rocks)
+            {
+                r.CheckColissions(enemies);
+            }
+        }
+
         internal void MarkAsRemovedRock(Rock rock)
         {
             this.removedRocks.Add(rock);
@@ -74,48 +93,55 @@ namespace Caveman.Models
         }
         public override void Update(ref GameTime gameTime)
         {
-            ExecuteMoves();
-            if (currentAnimation.IsInterruptible || !currentAnimation.IsLooping)
+            if (this.Health <= 0)
+                this.Died = true;
+
+            if (!this.Died)
             {
-                currentAnimation = AnimationsDict["Standing"];
-                currentAnimation.IsLooping = true;
-                SetAnimation();
-            }
-
-            #region Gravity and Y Coordinates
-            VelocityY += gravity;
-            this.Position += new Vector2(0, VelocityY);
-
-            if (this.Position.Y > 350)
-            {
-                this.Position = new Vector2(this.Position.X, 350);
-                VelocityY = 0.0f;
-                Jumping = false;
-            }
-
-            if(this.Position.Y < -10)
-                this.Position = new Vector2(this.Position.X, -10);
-            #endregion
-
-            #region Manage Animation Frames
-            _timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            if (_timer > currentAnimation.FrameSpeed)
-            {
-                _timer = 0f;
-
-                currentAnimation.CurrentFrame++;
-
-                if (currentAnimation.CurrentFrame >= currentAnimation.FrameCount)
+                ExecuteMoves();
+                if (currentAnimation.IsInterruptible || !currentAnimation.IsLooping)
                 {
-                    currentAnimation.CurrentFrame = 0;
-                    currentAnimation.IsLooping = false;
+                    currentAnimation = AnimationsDict["Standing"];
+                    currentAnimation.IsLooping = true;
+                    SetAnimation();
                 }
-            }
-            #endregion
 
-            UpdateWeapons(ref gameTime);
-            RemoveRocks();
+                #region Gravity and Y Coordinates
+                VelocityY += gravity;
+                this.Position += new Vector2(0, VelocityY);
+
+                if (this.Position.Y > 350)
+                {
+                    this.Position = new Vector2(this.Position.X, 350);
+                    VelocityY = 0.0f;
+                    Jumping = false;
+                }
+
+                if (this.Position.Y < -10)
+                    this.Position = new Vector2(this.Position.X, -10);
+                #endregion
+
+                #region Manage Animation Frames
+                _timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                if (_timer > currentAnimation.FrameSpeed)
+                {
+                    _timer = 0f;
+
+                    currentAnimation.CurrentFrame++;
+
+                    if (currentAnimation.CurrentFrame >= currentAnimation.FrameCount)
+                    {
+                        currentAnimation.CurrentFrame = 0;
+                        currentAnimation.IsLooping = false;
+                    }
+                }
+                #endregion
+
+                UpdateWeapons(ref gameTime);
+                RemoveRocks();
+            }
+
         }
         private void ExecuteMoves()
         {
@@ -227,8 +253,8 @@ namespace Caveman.Models
 
         public override void Draw(ref SpriteBatch spriteBatch, ref GameTime gameTime)
         {
-
-            spriteBatch.Draw(currentAnimation.Texture,
+            this.Texture = currentAnimation.Texture;
+            spriteBatch.Draw(this.Texture,
                  Position,
                  new Rectangle(currentAnimation.CurrentFrame * currentAnimation.FrameWidth,
                                0,
@@ -253,6 +279,11 @@ namespace Caveman.Models
             {
                 r.Update(ref gameTime);
             }
+        }
+
+        public void ReceiveHit(IHarmful harm)
+        {
+            this.Health -= harm.Damage;
         }
     }
 }

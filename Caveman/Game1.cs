@@ -14,6 +14,7 @@ namespace Caveman
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         public static Rectangle Bounds { get; private set; }
+
         GameManager manager;
 
         public Game1()
@@ -44,7 +45,7 @@ namespace Caveman
 
         protected override void UnloadContent()
         {
-            manager.UnloadContent(Content);
+            manager.UnloadContent();
         }
 
 
@@ -61,7 +62,7 @@ namespace Caveman
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(new Color(254,195,41));
 
             // TODO: Add your drawing code here
             spriteBatch.Begin();

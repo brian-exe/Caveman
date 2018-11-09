@@ -12,7 +12,14 @@ namespace Caveman.Models
     public class Sprite : BaseSprite
     {
         protected Dictionary<string, Animation> AnimationsDict;
-        protected Animation currentAnimation;
+        public Animation currentAnimation;
+        public Rectangle Rectangle
+        {
+            get
+            {
+                return new Rectangle((int)Position.X, (int)Position.Y,this.currentAnimation.FrameWidth, this.Texture.Height);
+            }
+        }
 
         public virtual void LoadContent(ContentManager content)
         {

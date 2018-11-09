@@ -74,10 +74,14 @@
     <Compile Include="Models\Animation.cs" />
     <Compile Include="Models\Background.cs" />
     <Compile Include="Models\Caveman.cs" />
+    <Compile Include="Models\IHarmful.cs" />
+    <Compile Include="Models\IMortable.cs" />
     <Compile Include="Models\Level.cs" />
+    <Compile Include="Models\Level0.cs" />
     <Compile Include="Models\Level1.cs" />
     <Compile Include="Models\Managers\GameManager.cs" />
     <Compile Include="Models\BaseSprite.cs" />
+    <Compile Include="Models\Pterodactyl.cs" />
     <Compile Include="Models\Rock.cs" />
     <Compile Include="Models\Sprite.cs" />
     <Compile Include="Program.cs" />
@@ -93,6 +97,7 @@
   <ItemGroup>
     <Content Include="Content\Backgrounds\posible-bg3.png" />
     <Content Include="Content\Backgrounds\treeses_pasto4.png" />
+    <Content Include="Content\caveman-word.png" />
     <Content Include="Content\CavemanHitting.png" />
     <Content Include="Content\CavemanHitting_sm.png" />
     <Content Include="Content\CavemanJumping.png" />
@@ -103,7 +108,11 @@
     <Content Include="Content\CavemanStanding.png" />
     <Content Include="Content\CavemanStanding_sm.png" />
     <Content Include="Content\CavemanThrowing.png" />
+    <Content Include="Content\pterodactilo-right_sm.png" />
     <Content Include="Content\pterodactilo.png" />
+    <Content Include="Content\pterodactilo_sm.png" />
+    <Content Include="Content\Sounds\Jungle.mp3" />
+    <Content Include="Content\Sounds\menu.mp3" />
     <Content Include="Content\spinning-rock_sm.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>
@@ -111,6 +120,10 @@
     <MonoGameContentReference Include="Content\Content.mgcb" />
     <None Include="app.manifest" />
     <None Include="Caveman_TemporaryKey.pfx" />
+    <None Include="Content\Fonts\MainFont.ttf" />
+    <None Include="Content\Fonts\Stats.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
@@ -119,6 +132,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
