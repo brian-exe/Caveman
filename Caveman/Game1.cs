@@ -42,7 +42,6 @@ namespace Caveman
 
         }
 
-
         protected override void UnloadContent()
         {
             manager.UnloadContent();
@@ -69,7 +68,6 @@ namespace Caveman
                 manager.Draw(ref spriteBatch, ref gameTime);
             spriteBatch.End();
             base.Draw(gameTime);
-
         }
     }
 }

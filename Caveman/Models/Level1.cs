@@ -17,6 +17,7 @@ namespace Caveman.Models
         List<Sprite> enemies = new List<Sprite>();
         List<Sprite> diedEnemies = new List<Sprite>();
         ContentManager contentManager;
+        SpriteFont font;
 
         private static Level1 instance = null;
         public static Level1 Instance
@@ -51,8 +52,10 @@ namespace Caveman.Models
             #endregion
 
             caveman = new Caveman(new Vector2(0, 350));
+            this.font = content.Load<SpriteFont>("./Fonts/Stats");
             caveman.LoadContent(content);
             AddPterodactyl();
+
 
         }
 
@@ -94,6 +97,7 @@ namespace Caveman.Models
                 if ((e as IMortable).Died)
                 {
                     diedEnemies.Add(e);
+                    caveman.ReceivePoints(100);
                 }
             }
 
@@ -106,6 +110,7 @@ namespace Caveman.Models
             {
                 this.enemies.RemoveAll(c => this.diedEnemies.Contains(c));
                 this.diedEnemies.RemoveAll(c => true);
+                AddPterodactyl();
             }
         }
         private void DrawEnemies(ref SpriteBatch spriteBatch, ref GameTime gameTime)
@@ -123,6 +128,13 @@ namespace Caveman.Models
             DrawEnemies(ref spriteBatch, ref gameTime);
 
             caveman.CheckColissions(enemies);
+            DrawCavemanHealth(ref spriteBatch, ref gameTime);
+        }
+
+        private void DrawCavemanHealth(ref SpriteBatch spriteBatch, ref GameTime gameTime)
+        {
+            spriteBatch.DrawString(font, "Vida: " + caveman.Health.ToString(), new Vector2(650, 450),Color.Black);
+            spriteBatch.DrawString(font, "Score: " + caveman.score.ToString(), new Vector2(0, 450),Color.Black);
         }
     }
 }

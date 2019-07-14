@@ -22,11 +22,12 @@ namespace Caveman.Models
         {
             this.Position = new Vector2(1000, 0);
             this.Color = Color.White;
-            velocity = -5.0f;
+            velocity = -7.0f;
             this.Died = false;
             this.Health = 100;
             this.Damage = 20;
         }
+
         public override void LoadContent(ContentManager content)
         {
             this.AnimationsDict = new Dictionary<string, Animation> {

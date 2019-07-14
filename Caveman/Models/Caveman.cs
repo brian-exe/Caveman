@@ -13,10 +13,13 @@ namespace Caveman.Models
     public class Caveman : Sprite, IMortable
     {
         float _timer;
-        private float VelocityX = 2;
+        private float VelocityX = 4;
         private float VelocityY =0.0f;
         private float gravity = 0.5f;
+        public float score = 0.0f;
         private bool Jumping = false;
+        private bool Touched = false;
+        private float _timerTouch = 0.0f;
         private Texture2D rockTexture;
 
         private List<Rock> rocks;
@@ -34,6 +37,7 @@ namespace Caveman.Models
             this.removedRocks = new List<Rock>();
             this.Died = false;
             this.Health = 100;
+            this.score = 0;
         }
 
         public override void LoadContent(ContentManager content)
@@ -68,8 +72,11 @@ namespace Caveman.Models
         {
             foreach(Sprite e in enemies)
             {
-                if (e.Rectangle.Intersects(this.Rectangle))
+                if (e.Rectangle.Intersects(this.Rectangle) && !Touched)
+                {
                     (this as IMortable).ReceiveHit(e as IHarmful);
+                    Touched = true;
+                }
             }
 
             foreach(Rock r in rocks)
@@ -95,6 +102,16 @@ namespace Caveman.Models
         {
             if (this.Health <= 0)
                 this.Died = true;
+
+            if (Touched)
+            {
+                _timerTouch += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (_timerTouch >= 2)
+                {
+                    Touched = false;
+                    _timerTouch = 0.0f;
+                }
+            }
 
             if (!this.Died)
             {
@@ -284,6 +301,11 @@ namespace Caveman.Models
         public void ReceiveHit(IHarmful harm)
         {
             this.Health -= harm.Damage;
+        }
+
+        public void ReceivePoints(float _score)
+        {
+            this.score += _score;
         }
     }
 }
